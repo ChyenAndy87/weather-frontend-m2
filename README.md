@@ -62,5 +62,6 @@ cd Portafolio
 ![Captura de ClimaApp](ruta/de/tu/captura.png)  
 *Ejemplo de la aplicación mostrando el pronóstico semanal de una ciudad.*
 
+Repositorio público: [https://github.com/ChyenAndy87/weather-frontend-m2](https://github.com/ChyenAndy87/weather-frontend-m2)
 
 
