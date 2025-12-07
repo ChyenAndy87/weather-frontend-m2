@@ -1,0 +1,27 @@
+/* Cards de ciudades */
+.ciudad-card {
+  cursor: pointer; /* Indica interactividad */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+}
+
+/* Card activa */
+.ciudad-activa {
+  border: 2px solid #800020;
+  box-shadow: 0 0 10px rgba(128, 0, 32, 0.4);
+  transform: scale(1.02);
+}
+
+/* Hover y focus para todas las cards */
+.ciudad-card:hover,
+.ciudad-card:focus {
+  border: 2px solid #800020;
+  box-shadow: 0 0 10px rgba(128, 0, 32, 0.3);
+  transform: scale(1.01);
+  outline: none; /* eliminamos outline por defecto */
+}
+
+/* Focus accesible (teclado) */
+.ciudad-card:focus-visible {
+  outline: 3px solid #FFB6C1; /* contraste para usuarios de teclado */
+  outline-offset: 3px;
+}
