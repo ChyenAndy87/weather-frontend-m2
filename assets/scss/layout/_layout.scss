@@ -1,0 +1,30 @@
+.weather-app {
+  font-family: $font-main;
+
+  &__header {
+    background-color: $color-primary;
+  }
+
+  &__brand {
+    color: white;
+    font-weight: bold;
+  }
+
+  &__nav-link {
+    color: white;
+
+    &:hover {
+      color: $color-primary-light;
+    }
+  }
+
+  &__title {
+    text-align: center;
+    margin: $spacing-l 0;
+  }
+
+  &__footer {
+    padding: $spacing-m 0;
+    background: #f4f4f4;
+  }
+}

@@ -1,4 +1,7 @@
+sass assets/scss/main.scss assets/css/main.css --watch
+
 /* Cards de ciudades */
+
 .ciudad-card {
   cursor: pointer; /* Indica interactividad */
   transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;

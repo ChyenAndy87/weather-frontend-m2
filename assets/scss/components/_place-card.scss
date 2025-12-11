@@ -1,0 +1,34 @@
+@mixin card-hover-effect {
+  transition: 0.2s ease all;
+
+  &:hover,
+  &:focus {
+    border: 2px solid $color-primary;
+    box-shadow: 0 0 10px rgba($color-primary, 0.3);
+    transform: scale(1.02);
+  }
+}
+
+.place-card {
+  padding: $spacing-m;
+  cursor: pointer;
+
+  @include card-hover-effect;
+
+  &--active {
+    border: 2px solid $color-primary;
+    box-shadow: 0 0 12px rgba($color-primary, 0.4);
+  }
+
+  &__name {
+    font-weight: bold;
+  }
+
+  &__clima {
+    color: gray;
+  }
+
+  &__temp {
+    font-size: 1.1rem;
+  }
+}
