@@ -1,69 +1,58 @@
-# ClimaApp – Frontend
+# ClimaApp 🌤️
 
-ClimaApp es una aplicación web que muestra el clima actual y el pronóstico semanal de varias ciudades del mundo.  
+## 1. Descripción breve
+ClimaApp es una aplicación web que muestra el **clima actual** de distintas ciudades del mundo en tarjetas dinámicas. Permite visualizar:
+- Nombre de la ciudad
+- Clima actual (ej: despejado, lluvioso)
+- Temperatura actual en °C
+- Humedad
 
-## Características principales
+El objetivo es aprender a consumir **APIs externas** y mostrar la información de forma clara y visual.
 
-- **HTML5 semántico:** header, nav, main, section, article, footer.  
-- **Bootstrap 5:** grid, cards, navbar, botones, utilidades de espaciado y tipografía.  
-- **Interactividad y accesibilidad:**  
-  - Click o teclado (`Enter` / `Space`) para ver el pronóstico semanal.  
-  - Resaltado visual de la ciudad seleccionada.  
-  - Botón “← Volver” y navegación por navbar.  
-  - Uso de `aria-labels` y roles ARIA para compatibilidad con lectores de pantalla.
- 
-- **Responsiva:** funciona en desktop y móviles.  
-- **Estilos personalizados:** CSS para resaltar ciudad activa.  
+---
 
-## Tecnologías
+## 2. Estructura de clases
 
-- HTML5  
-- CSS3  
-- Bootstrap 5 (CDN) [documentación](https://getbootstrap.com/docs/5.3/getting-started/introduction/)  
-- JavaScript y jQuery  
+La app se organiza en **dos clases principales**:
 
+1. **ApiClient**  
+   - Encargada de comunicarse con las APIs externas.  
+   - Métodos:
+     - `getWeather(ciudad)`: obtiene coordenadas de la ciudad y luego consulta el clima actual.  
 
-## Estructura del proyecto
+2. **WeatherApp**  
+   - Controla la lógica de la aplicación.  
+   - Métodos principales:
+     - `cargarLugares()`: recorre las ciudades y llama a `ApiClient` para obtener datos, luego renderiza las cards.  
+     - `renderCiudad(ciudad, clima)`: genera la card HTML con los datos de la ciudad.  
+     - `calcularEstadisticas(pronostico)`: calcula máximas, mínimas y promedio de temperaturas (no usado en la vista actual).  
+     - `generarAlertas(pronostico)`: analiza si hay lluvia o calor extremo para mostrar alertas (no usado en la vista actual).
 
-Portafolio/
-├── Clima.html
-├── assets/          # Carpeta con todos los archivos de estilo y scripts
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── main.js
+---
 
+## 3. API de clima utilizada
 
-- `Clima.html` → archivo principal de la aplicación.  
-- `assets/css/style.css` → estilos personalizados (resaltado de ciudad activa, etc.).  
-- `assets/js/main.js` → lógica de JavaScript para generar las cards, manejar eventos de click/teclado y navegación.  
+- **Nombre:** Open-Meteo  
+- **API de geocoding:** https://geocoding-api.open-meteo.com/v1/search?name={ciudad}  
+- **API de clima:** https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true  
+- Documentación oficial: [Open-Meteo Docs](https://open-meteo.com/en/docs)
 
-## Uso
+> Se usa primero la API de geocoding para obtener latitud y longitud de la ciudad, y luego se consulta el clima actual.
 
+---
 
-1. Clonar el repositorio:
+## 4. Estadísticas
 
-```bash
-git clone <URL_DEL_REPOSITORIO>
-cd Portafolio
+En esta versión se calcula:
+- **Máxima:** mayor temperatura registrada (`tempMax`)  
+- **Mínima:** menor temperatura registrada (`tempMin`)  
+- **Promedio:** promedio de máximas y mínimas  
+- **Alertas:** si hay más de 3 días lluviosos → “Semana lluviosa”; si el promedio supera 30°C → “Alerta de calor”  
 
-## Requisitos técnicos
+> Nota: en la versión actual solo se muestran las cards; estas estadísticas se preparan para funcionalidades futuras.
 
-- HTML5 semántico (`header`, `nav`, `main`, `section`, `article`, `footer`)
-- Bootstrap 5:
-  - Grid: contenedores, filas, columnas
-  - Utilidades: espaciado, tipografía, display
-  - Componentes: navbar, cards, botones, badges/list-group según diseño
-- Inclusión de Bootstrap vía CDN (CSS y JS)
-- Git/GitHub: repositorio público `weather-frontend-m2`, mínimo 3 commits descriptivos
+---
 
-## Vista previa
+## 5. Enlace al repositorio
 
-![Captura de ClimaApp](ruta/de/tu/captura.png)  
-*Ejemplo de la aplicación mostrando el pronóstico semanal de una ciudad.*
-
-Repositorio público: [https://github.com/ChyenAndy87/weather-frontend-m2](https://github.com/ChyenAndy87/weather-frontend-m2)
-
-# Cambio temporal para commit final
-
-
+- Repositorio público: [https://github.com/ChyenAndy87/weather-frontend-m2](https://github.com/ChyenAndy87/weather-frontend-m2)
