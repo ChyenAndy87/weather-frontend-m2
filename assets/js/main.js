@@ -1,144 +1,129 @@
-// Datos de ejemplo
 const ciudades = [
-  { nombre: "New York", clima: "Soleado", temperatura: "25°C", humedad: "40%" },
-  { nombre: "Tokyo", clima: "Nublado", temperatura: "18°C", humedad: "60%" },
-  { nombre: "Londres", clima: "Lluvioso", temperatura: "15°C", humedad: "70%" },
-  { nombre: "Madrid", clima: "Soleado", temperatura: "24°C", humedad: "45%" },
-  { nombre: "París", clima: "Nublado", temperatura: "20°C", humedad: "55%" },
-  { nombre: "Buenos Aires", clima: "Soleado", temperatura: "25°C", humedad: "40%" },
-  { nombre: "Santiago", clima: "Nublado", temperatura: "18°C", humedad: "60%" },
-  { nombre: "Valparaíso", clima: "Lluvioso", temperatura: "15°C", humedad: "70%" },
-  { nombre: "El Quisco", clima: "Soleado", temperatura: "24°C", humedad: "45%" },
-  { nombre: "Concepción", clima: "Nublado", temperatura: "20°C", humedad: "55%" }
+  { nombre: "New York", humedad: "40%" },
+  { nombre: "Tokyo", humedad: "60%" },
+  { nombre: "Londres", humedad: "70%" },
+  { nombre: "Madrid", humedad: "45%" },
+  { nombre: "París", humedad: "55%" },
+  { nombre: "Buenos Aires", humedad: "40%" },
+  { nombre: "Santiago", humedad: "60%" },
+  { nombre: "Valparaíso", humedad: "70%" },
+  { nombre: "El Quisco", humedad: "45%" },
+  { nombre: "Concepción", humedad: "55%" }
 ];
 
-// -----------------------------------------------------------------------------
-// CREAR LAS CARDS DINÁMICAMENTE
-// -----------------------------------------------------------------------------
-$(document).ready(function () {
+class ApiClient {
+  async getWeather(ciudad) {
+    try {
+      const resCoords = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${ciudad}`);
+      const dataRecords = await resCoords.json();
+      if (!dataRecords.results || dataRecords.results.length === 0) return null;
 
-  ciudades.forEach(ciudad => {
-    const cardHTML = `
-      <div class="col-12 col-md-6 col-lg-4">
-        <article class="place-card card p-3"
-                data-ciudad="${ciudad.nombre}"
-                tabindex="0"
-                role="button"
-                aria-label="Ver pronóstico semanal de ${ciudad.nombre}">
+      const { latitude, longitude } = dataRecords.results[0];
 
-          <h5 class="place-card__name">${ciudad.nombre}</h5>
-          <p class="place-card__clima">Clima: ${ciudad.clima}</p>
-          <p class="place-card__temp">Temperatura: ${ciudad.temperatura}</p>
-          <p class="place-card__hum">Humedad: ${ciudad.humedad}</p>
+      const resWeather = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
+      const dataWeather = await resWeather.json();
+       const weatherCodeMap = {
+        0: "Despejado",
+        1: "Parcialmente nublado",
+        2: "Nublado",
+        3: "Lluvioso",
+        45: "Niebla",
+        48: "Deposito de escarcha",
+        51: "Llovizna ligera",
+        53: "Llovizna moderada",
+        55: "Llovizna intensa",
+        61: "Lluvia ligera",
+        63: "Lluvia moderada",
+        65: "Lluvia intensa",
+        80: "Chubascos",
+        81: "Chubascos fuertes",
+        82: "Tormenta",
+      };
+      return {
+        nombre: ciudad,
+        clima: weatherCodeMap[dataWeather.current_weather.weathercode] || "Desconocido" , 
+        temperatura: `${dataWeather.current_weather.temperature}°C`
+      };
 
-        </article>
-      </div>
-    `;
+    } catch (error) {
+      console.error("Error ApiClient:", error);
+      return null;
+    }
 
-    $("#ciudades-row").append(cardHTML);
-  });
-
-});
-
-// -----------------------------------------------------------------------------
-// EVENTO: AL HACER CLICK EN UNA CARD
-// -----------------------------------------------------------------------------
-$(document).on("click", ".place-card", function () {
-
-  // Activar visualmente la card seleccionada
-  $(".place-card").removeClass("place-card--active");
-  $(this).addClass("place-card--active");
-
-  const ciudadSeleccionada = $(this).data("ciudad");
-
-  if (!ciudadSeleccionada) {
-    alert("Error: No se pudo cargar la información de la ciudad.");
-    return;
+    }
   }
 
-  // Mostrar sección de detalle
-  $("#home-section").addClass("d-none");
-  $("#detalle-section").removeClass("d-none");
 
-  // Actualizar título del detalle
-  $("#detalle-ciudad").text(`Pronóstico semanal: ${ciudadSeleccionada}`);
-
-  // Limpiar sección anterior
-  $("#pronostico-row").empty();
-
-  // Datos de ejemplo del pronóstico semanal
-  const pronosticoMock = [
-    { dia: "Lunes", clima: "Soleado", tempMax: "26°C", tempMin: "18°C" },
-    { dia: "Martes", clima: "Nublado", tempMax: "24°C", tempMin: "17°C" },
-    { dia: "Miércoles", clima: "Lluvioso", tempMax: "20°C", tempMin: "15°C" },
-    { dia: "Jueves", clima: "Soleado", tempMax: "25°C", tempMin: "16°C" },
-    { dia: "Viernes", clima: "Nublado", tempMax: "23°C", tempMin: "18°C" },
-    { dia: "Sábado", clima: "Soleado", tempMax: "27°C", tempMin: "19°C" },
-    { dia: "Domingo", clima: "Lluvioso", tempMax: "21°C", tempMin: "15°C" }
-  ];
-
-  // Si no hay pronóstico
-  if (!pronosticoMock.length) {
-    $("#pronostico-row").html(`
-      <p class="text-danger">No hay datos disponibles para esta ciudad.</p>
-    `);
-    return;
+class WeatherApp {
+  constructor(apiClient,ciudades){
+    this.apiClient = apiClient;
+    this.ciudades = ciudades;
   }
 
-  // Renderizar cards del pronóstico
-  pronosticoMock.forEach(dia => {
-    const cardDia = `
-      <div class="col-6 col-sm-4 col-lg-2">
-        <article class="card p-2 text-center">
-          <h6>${dia.dia}</h6>
-          <p>${dia.clima}</p>
-          <p>Max: ${dia.tempMax}</p>
-          <p>Min: ${dia.tempMin}</p>
-        </article>
-      </div>
-    `;
-    $("#pronostico-row").append(cardDia);
-  });
+  async cargarLugares() {
+  $("#ciudades-row").html("<p>cargando ciudades ...</p>");
 
-});
 
-// -----------------------------------------------------------------------------
-// ACTIVAR CARD CON ENTER O ESPACIO (ACCESIBILIDAD)
-// -----------------------------------------------------------------------------
-$(document).on("keydown", ".place-card", function (e) {
-  if (e.key === "Enter" || e.key === " ") {
-    e.preventDefault();
-    $(this).click();
+  for (const ciudad of this.ciudades){
+    try {
+    const clima = await this.apiClient.getWeather(ciudad.nombre);
+      if ($("#ciudades-row p").length) {
+        $("#ciudades-row").empty();
+      }
+    this.renderCiudad(ciudad, clima);
+  } catch(error) {
+    console.error(error);
+     if ($("#ciudades-row p").length) {
+        $("#ciudades-row").empty();
+      }
+
+    this.renderCiudad(ciudad, null);
+
   }
-});
-
-// -----------------------------------------------------------------------------
-// BOTÓN VOLVER AL HOME
-// -----------------------------------------------------------------------------
-$("#back-home").on("click", function () {
-  $("#detalle-section").addClass("d-none");
-  $("#home-section").removeClass("d-none");
-});
-
-// -----------------------------------------------------------------------------
-// NAVBAR: HOME
-// -----------------------------------------------------------------------------
-$("#nav-home").on("click", function (e) {
-  e.preventDefault();
-  $("#detalle-section").addClass("d-none");
-  $("#home-section").removeClass("d-none");
-});
-
-// -----------------------------------------------------------------------------
-// NAVBAR: DETALLE
-// (se activa solo si no está "disabled")
-// -----------------------------------------------------------------------------
-$("#nav-detalle").on("click", function (e) {
-  if ($(this).hasClass("disabled")) {
-    e.preventDefault();
-    return;
   }
+}
 
-  $("#home-section").addClass("d-none");
-  $("#detalle-section").removeClass("d-none");
+renderCiudad(ciudad, clima){
+  const cardHTML = `
+  <div class="col-12 col-md-6 col-lg-4">
+    <article class= "place-card card p-3" 
+     data-ciudad="${ciudad.nombre}"
+     tabindex="0"
+     role="button">
+     <h5>${ciudad.nombre}</h5>
+     <p>Clima: ${clima?.clima || "N/A"}</p>
+     <p>Temperatura: ${clima?.temperatura || "N/A"}</p>
+     <p>Humedad: ${ciudad.humedad}</p>
+   </article>
+  </div>`;
+
+$("#ciudades-row").append(cardHTML);
+}
+
+calcularEstadisticas(pronostico){
+  const max = Math.max(...pronostico.map(d => parseInt(d.tempMax)));
+  const min = Math.min(...pronostico.map(d => parseInt(d.tempMin)));
+  const promedio = Math.round(
+    pronostico.reduce((acc,d) => acc + parseInt(d.tempMax) + parseInt(d.tempMin), 0) /
+    (pronostico.length * 2)
+  );
+
+  return { min, max, promedio};
+}
+
+generarAlertas(pronostico) {
+  const lluvia = pronostico.filter(d=> d.clima === "Lluvioso").length;
+  const alertas = [];
+
+  if (lluvia >= 3) alertas.push("Semana lluviosa");
+  if (this.calcularEstadisticas(pronostico).promedio > 30) alertas.push("Alerta de calor");
+  return alertas;
+}
+}
+
+const apiClient = new ApiClient();
+const app = new WeatherApp(apiClient, ciudades);
+
+$(document).ready(()=> {
+  app.cargarLugares();
 });

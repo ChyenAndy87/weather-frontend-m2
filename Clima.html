@@ -1,77 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-     <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
+  <!-- CSS compilado de SASS -->
+  <link rel="stylesheet" href="assets/css/style.css">
 
-    <title>Clima en las ciudades del Mundo</title>
-
+  <title>ClimaApp</title>
 </head>
 
+<body class="weather-app">
 
-<body>
-<header>
-  <nav class="navbar navbar-expand-lg" style="background-color: #800020;">
-  <div class="container">
-    <a class="navbar-brand text-white" href="#">ClimaApp</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <!-- Navbar -->
+  <header class="weather-app__header">
+    <nav class="navbar navbar-expand-lg bg-primary-subtle">
+      <div class="container">
+        <a class="navbar-brand weather-app__brand" href="#">ClimaApp</a>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link text-white active" aria-current="page" href="#" id="nav-home">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="#" id="nav-detalle">Detalle</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-  </nav>
-</header>
-    
-<main>
-  <section id="home-section" aria-labelledby="titulo-home">
-  <h1 id="titulo-home">Clima en las ciudades del Mundo</h1>
-    <div class="container text-center">
-      <div class="row" id="ciudades-row">
-        <!-- Cards -->
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navbarNav" class="collapse navbar-collapse">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a id="nav-home" class="nav-link weather-app__nav-link active" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a id="nav-detalle" class="nav-link weather-app__nav-link" href="#">Detalle</a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </section>
+    </nav>
+  </header>
 
-  <section class="d-none" id="detalle-section">
-    <div class="container mt-4">
-      <button class="btn btn-primary mb-3" id="back-home" aria-label="Volver a la página principal">← Volver</button>
-      <h2 id="detalle-ciudad"></h2>
-      <div class="row" id="pronostico-row"></div>
-    </div>
-  </section>
-</main>
+  <!-- Main -->
+  <main class="weather-app__content">
 
-<footer class="text-center mt-4">
-  <p>© 2025 ClimaApp</p>
-</footer>
+    <!-- Home -->
+    <section id="home-section" class="weather-app__home">
+      <h1 class="weather-app__title">Clima en las ciudades del mundo</h1>
 
-    
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+      <div class="container">
+        <div id="ciudades-row" class="row g-3">
+          <!-- Cards insertadas por JS -->
+        </div>
+      </div>
+    </section>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Detalle -->
+    <section id="detalle-section" class="weather-app__detalle d-none">
+      <div class="container mt-4">
+        <button id="back-home" class="btn btn-primary mb-3">← Volver</button>
 
-<script src="assets/js/main.js"></script>
+        <h2 id="detalle-ciudad" class="weather-app__detalle-title"></h2>
 
+        <div id="pronostico-row" class="row g-3"></div>
+      </div>
+    </section>
 
+  </main>
 
+  <!-- Footer -->
+  <footer class="weather-app__footer text-center mt-4">
+    <p>© 2025 ClimaApp</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="assets/js/main.js"></script>
 
 </body>
-
-
-
 </html>
